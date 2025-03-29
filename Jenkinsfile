@@ -28,7 +28,12 @@ pipeline {
             steps {
                 sh 'docker stop myproject || true'
                 sh 'docker rm myproject || true'
-                sh 'docker run -d -p 8001:8001 --name myproject $IMAGE_NAME'
+                sh 'docker run -d -p 8001:8001 --restart unless-stopped --name myproject $IMAGE_NAME'
+            }
+        }
+        stage('Cleanup') {
+            steps {
+                sh 'docker system prune -f'
             }
         }
     }
